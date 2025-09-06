@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.facint.taskmanager.model.Task;
-import com.facint.taskmanager.repository.TaskRepository;
+import com.facint.taskmanager.service.TaskService;
 
 import jakarta.validation.Valid;
 
@@ -21,31 +21,31 @@ import jakarta.validation.Valid;
 public class TaskController {
     
     @Autowired
-    TaskRepository repository;
+    TaskService service;
 
     @GetMapping("/tasks")
     public List<Task> retrieveAllTasks(@RequestParam Map<String, String> params) {
 
         if (params.isEmpty()) {
-            return repository.findAll();
+            return service.retrieveAllTasks();
         }
 
         String description = params.get("description");
-        return repository.findByDescriptionLike("%" + description + "%");
+        return service.retrieveTasksByDescription(description);
     }
 
     @GetMapping("/tasks/{id}")
     public Task retrieveTaskById(@PathVariable Integer id) {
-        return repository.findById(id).orElse(null);
+        return service.retrieveTaskById(id);
     }
 
     @PostMapping("/tasks")
     public Task addTask(@Valid @RequestBody Task task) {
-        return repository.save(task);
+        return service.saveTask(task);
     }
 
     @DeleteMapping("/tasks/{id}")
     public void removeTask(@PathVariable Integer id) {
-        repository.deleteById(id);
+        service.removeById(id);
     }
 }
