@@ -33,6 +33,5 @@ Thumbs.db
 # others
 .gitattributes
 .mvn/
-HELP.md
 mvnw
 mvnw.cmd
