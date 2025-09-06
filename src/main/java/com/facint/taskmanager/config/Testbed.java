@@ -49,6 +49,15 @@ public class Testbed {
             task.setCategory(category);
             task.setUser(user);
             taskRepository.save(task);
+
+            Task task2 = new Task();
+            task2.setDescription("Kibana Data & Analytics");
+            task2.setDueDate(LocalDate.now().plusDays(90));
+            task2.setStatus(TaskStatus.DONE);
+            task2.setVisible(true);
+            task2.setCategory(category);
+            task2.setUser(user);
+            taskRepository.save(task2);
         };
     }
 }

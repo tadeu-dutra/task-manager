@@ -11,12 +11,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
 import lombok.Data;
 
 @Data
 @Entity
 @Table(name = "tasks")
+@NamedQuery(name = "Task.findByCategoryUsingNamedQuery", query = "select t from Task t inner join t.category c where c.name = ?1")
 public class Task {
     
     @Id
