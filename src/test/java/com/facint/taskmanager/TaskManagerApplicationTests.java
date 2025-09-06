@@ -1,4 +1,4 @@
-package com.facint.task_manager;
+package com.facint.taskmanager;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

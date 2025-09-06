@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.facint</groupId>
-	<artifactId>task-manager</artifactId>
+	<artifactId>taskmanager</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>task-manager</name>
+	<name>taskmanager</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>
@@ -38,7 +38,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
@@ -90,5 +89,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>
