@@ -9,7 +9,7 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 @Configuration
-public class Internationalization {
+public class I18nConfig {
 
     @Bean
     public MessageSource messageSource() {
