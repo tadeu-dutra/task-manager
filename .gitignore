@@ -29,3 +29,10 @@ Thumbs.db
 
 # Spring Boot specific
 .spring/
+
+# others
+.gitattributes
+.mvn/
+HELP.md
+mvnw
+mvnw.cmd
