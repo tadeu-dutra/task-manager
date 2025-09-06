@@ -28,15 +28,15 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @NotBlank(message = "Description of the Task cannot be empty")
-    @Size(min = 5, max = 150, message = "Description of the Task must have between 5 and 150 characters")
+    @NotBlank(message = "{task.description.not-blank}")
+    @Size(min = 5, max = 150, message = "{task.description.size}")
     @Column(nullable = false, length = 150)
     private String description;
 
     @Enumerated(EnumType.STRING)
     private TaskStatus status;
 
-    @FutureOrPresent(message = "Due date must be a future date")
+    @FutureOrPresent(message = "{task.description.future-or-present}")
     private LocalDate dueDate;
 
     private boolean isVisible;
