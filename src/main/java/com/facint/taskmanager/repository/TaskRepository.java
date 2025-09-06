@@ -13,5 +13,7 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
     public List<Task> findByDescriptionLike(String description);
 
     @Query("select t from Task t inner join t.category c where c.name = ?1")
-    public List<Task> findByCategoryName(String categoryName);
+    public List<Task> findByCategoryUsingQuery(String categoryName);
+
+    public List<Task> findByCategoryUsingNamedQuery(String categoryName);
 }

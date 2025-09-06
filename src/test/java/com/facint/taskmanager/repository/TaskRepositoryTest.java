@@ -16,8 +16,14 @@ public class TaskRepositoryTest {
     private TaskRepository repository;
 
     @Test
-    void testFindByCategoryName() {
-        List<Task> tasks = repository.findByCategoryName("Study");
+    void testFindByCategoryUsingQuery() {
+        List<Task> tasks = repository.findByCategoryUsingQuery("Study");
+        Assertions.assertEquals(2, tasks.size());
+    }
+
+    @Test
+    void testFindByCategoryUsingNamedQuery() {
+        List<Task> tasks = repository.findByCategoryUsingNamedQuery("Study");
         Assertions.assertEquals(2, tasks.size());
     }
 }
