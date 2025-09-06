@@ -16,17 +16,17 @@ public class TaskServiceIntegrationTest {
     private TaskService service;
 
     @Test
-    void shouldStartTask() {
-        Task task = service.startTaskById(1);
+    void shouldMoveTaskToInProgress() {
+        Task task = service.moveTaskToInProgress(1);
         Assertions.assertEquals(TaskStatus.IN_PROGRESS, task.getStatus());
     }
 
     @Test
-    void shoudNotStartTaskThatIsDone() {
+    void shoudNotMoveTaskToInProgress() {
         Task task = service.retrieveTaskById(1);
         task.setStatus(TaskStatus.DONE);
         service.saveTask(task);
         Assertions.assertEquals(TaskStatus.DONE, task.getStatus());
-        Assertions.assertThrows(TaskStatusException.class, () -> service.startTaskById(1));
+        Assertions.assertThrows(TaskStatusException.class, () -> service.moveTaskToInProgress(1));
     }
 }
