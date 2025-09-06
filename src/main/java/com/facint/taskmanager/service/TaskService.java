@@ -38,7 +38,7 @@ public class TaskService {
         repository.deleteById(id);
     }
 
-    public Task startTaskById(Integer id) {
+    public Task moveTaskToInProgress(Integer id) {
 
         Task task = retrieveTaskById(id);
 
@@ -47,8 +47,34 @@ public class TaskService {
         }
 
         task.setStatus(TaskStatus.IN_PROGRESS);
-
         repository.save(task);
+
+        return task;
+    }
+
+    public Task moveTaskToDone(Integer id) {
+        Task task = retrieveTaskById(id);
+
+        if (TaskStatus.CANCELED.equals(task.getStatus())) {
+            throw new TaskStatusException();
+        }
+
+        task.setStatus(TaskStatus.DONE);
+        repository.save(task);
+
+        return task;
+    }
+
+    public Task cancelTask(Integer id) {
+        Task task = retrieveTaskById(id);
+
+        if (TaskStatus.DONE.equals(task.getStatus())) {
+            throw new TaskStatusException();
+        }
+
+        task.setStatus(TaskStatus.CANCELED);
+        repository.save(task);
+
         return task;
     }
 }
