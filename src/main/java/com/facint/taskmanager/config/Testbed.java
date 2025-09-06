@@ -44,7 +44,7 @@ public class Testbed {
             Task task = new Task();
             task.setDescription("Elasticsearch On-Demand");
             task.setDueDate(LocalDate.now().plusDays(90));
-            task.setStatus(TaskStatus.DONE);
+            task.setStatus(TaskStatus.TO_DO);
             task.setVisible(true);
             task.setCategory(category);
             task.setUser(user);
