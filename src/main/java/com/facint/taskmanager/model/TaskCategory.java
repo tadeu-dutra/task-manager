@@ -19,8 +19,8 @@ public class TaskCategory {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @NotBlank(message = "Name of the Category cannot be empty")
-    @Size(max = 50, message = "Name of the Category cannot exceed 50 characters")
+    @NotBlank(message = "{task.category.not-blank}")
+    @Size(max = 50, message = "{task.category.size}")
     @Column(length = 50)
     private String name;
 }
