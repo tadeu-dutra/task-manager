@@ -28,7 +28,7 @@ This is a demo project for Spring Boot, showcasing the development of a task man
 1. Clone the repository:
    ```bash
    git clone <repository-url>
-   cd task-manager
+   cd taskmanager
    ```
 
 2. Build the project:

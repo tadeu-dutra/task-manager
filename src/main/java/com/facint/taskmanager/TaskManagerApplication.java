@@ -1,4 +1,4 @@
-package com.facint.task_manager;
+package com.facint.taskmanager;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,4 +1,4 @@
-package com.facint.task_manager.model;
+package com.facint.taskmanager.model;
 
 public enum TaskStatus {
     
