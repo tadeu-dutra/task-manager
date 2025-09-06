@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.facint.taskmanager.model.Task;
 import com.facint.taskmanager.repository.TaskRepository;
 
+import jakarta.validation.Valid;
+
 @RestController
 public class TaskController {
     
@@ -38,7 +40,7 @@ public class TaskController {
     }
 
     @PostMapping("/tasks")
-    public Task addTask(@RequestBody Task task) {
+    public Task addTask(@Valid @RequestBody Task task) {
         return repository.save(task);
     }
 

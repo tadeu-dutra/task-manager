@@ -13,6 +13,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
@@ -25,12 +28,15 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
+    @NotBlank(message = "Description of the Task cannot be empty")
+    @Size(min = 5, max = 150, message = "Description of the Task must have between 5 and 150 characters")
     @Column(nullable = false, length = 150)
     private String description;
 
     @Enumerated(EnumType.STRING)
     private TaskStatus status;
 
+    @FutureOrPresent(message = "Due date must be a future date")
     private LocalDate dueDate;
 
     private boolean isVisible;
