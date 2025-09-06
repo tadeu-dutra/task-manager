@@ -4,7 +4,11 @@ A Spring Boot project developed during the Software Architecture in Java postgra
 
 ## Description
 
-This is a demo project for Spring Boot, showcasing the development of a task management application using modern Java technologies.
+This is a demo project for Spring Boot, showcasing the development of a task management application using Java.
+
+## Architecture Diagram
+
+![Project Diagram](docs/diagram.drawio.png)
 
 ## Features
 
