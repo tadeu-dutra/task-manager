@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.facint.taskmanager.controller.request.TaskRequest;
 import com.facint.taskmanager.controller.response.TaskResponse;
 import com.facint.taskmanager.model.Task;
 import com.facint.taskmanager.service.TaskService;
@@ -57,7 +58,10 @@ public class TaskController {
     }
 
     @PostMapping("/tasks")
-    public TaskResponse addTask(@Valid @RequestBody Task task) {
+    public TaskResponse addTask(@Valid @RequestBody TaskRequest taskRequest) {
+
+        Task task = mapper.map(taskRequest, Task.class);
+
         return mapper.map(service.saveTask(task), TaskResponse.class);
     }
 
