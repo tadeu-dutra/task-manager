@@ -5,6 +5,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -64,7 +65,11 @@ public class TaskController {
         Task task = service.retrieveTaskById(id);
         TaskResponse taskResponse = mapper.map(task, TaskResponse.class);
 
-        EntityModel<TaskResponse> taskModel = EntityModel.of(taskResponse, linkTo(methodOn(TaskController.class).retrieveTaskById(id)).withSelfRel());
+        EntityModel<TaskResponse> taskModel = EntityModel.of(taskResponse, 
+            linkTo(methodOn(TaskController.class).retrieveTaskById(id)).withSelfRel(),
+            linkTo(methodOn(TaskController.class).retrieveAllTasks(new HashMap<>())).withRel("tasks"),
+            linkTo(methodOn(TaskCategoryController.class).retrieveCategoryById(taskResponse.getCategoryId())).withRel("category"),
+            linkTo(methodOn(UserController.class).retrieveUserById(taskResponse.getUserId())).withRel("user"));
         
         return taskModel;
     }
