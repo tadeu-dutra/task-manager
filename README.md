@@ -123,7 +123,6 @@ The application provides RESTful endpoints for managing tasks. All endpoints ret
 {
   "description": "Complete project documentation",
   "dueDate": "2023-12-31",
-  "isVisible": true,
   "categoryId": 1,
   "userId": 1
 }
