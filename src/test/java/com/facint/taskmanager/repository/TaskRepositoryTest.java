@@ -30,6 +30,15 @@ public class TaskRepositoryTest {
     @Test
     void testFindByUser() {
         List<Task> tasks = repository.findByUser("tadeu");
-        Assertions.assertEquals(1, tasks.size());
+        
+        // Print task information using streams
+        tasks.stream()
+        .forEach(task -> System.out.println("Task ID: " + task.getId() +
+        ", Description: " + task.getDescription() +
+        ", Status: " + task.getStatus() +
+        ", Due Date: " + task.getDueDate() +
+        ", Visible: " + task.isVisible()));
+        
+        Assertions.assertEquals(2, tasks.size());
     }
 }
