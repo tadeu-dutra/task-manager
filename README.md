@@ -8,11 +8,7 @@ This is a demo project for Spring Boot, showcasing the development of a task man
 
 ## Architecture Diagram
 
-![Project Diagram](docs/diagram.drawio.png)
-
-
 <img width="500" height="381" alt="image" src="https://github.com/user-attachments/assets/92c9f751-382e-4c92-9677-b3bca6261885" />
-
 
 ## Features
 
