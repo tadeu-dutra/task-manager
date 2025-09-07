@@ -22,6 +22,7 @@ import lombok.Data;
 @Entity
 @Table(name = "tasks")
 @NamedQuery(name = "Task.findByCategoryUsingNamedQuery", query = "select t from Task t inner join t.category c where c.name = ?1")
+@NamedQuery(name = "Task.findByUser", query = "select t from Task t inner join t.user u where u.username = ?1")
 public class Task {
     
     @Id

@@ -26,4 +26,10 @@ public class TaskRepositoryTest {
         List<Task> tasks = repository.findByCategoryUsingNamedQuery("Study");
         Assertions.assertEquals(2, tasks.size());
     }
+
+    @Test
+    void testFindByUser() {
+        List<Task> tasks = repository.findByUser("tadeu");
+        Assertions.assertEquals(1, tasks.size());
+    }
 }
