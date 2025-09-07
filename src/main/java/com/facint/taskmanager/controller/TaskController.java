@@ -39,8 +39,11 @@ public class TaskController {
         if (params.isEmpty()) {
             tasks = service.retrieveAllTasks();
         } else {
-            String description = params.get("description");
-            tasks = service.retrieveTasksByDescription(description);
+            if (params.containsKey("username")) {
+                tasks = service.retrieveTaskByUser(params.get("username"));
+            } else if (params.containsKey("description")) {
+                tasks = service.retrieveTasksByDescription(params.get("description"));
+            }
         }
 
         List<TaskResponse> tasksResponse = tasks.stream().map(t -> mapper.map(t, TaskResponse.class)).collect(Collectors.toList());

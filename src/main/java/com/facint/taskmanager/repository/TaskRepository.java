@@ -16,4 +16,6 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
     public List<Task> findByCategoryUsingQuery(String categoryName);
 
     public List<Task> findByCategoryUsingNamedQuery(String categoryName);
+
+    public List<Task> findByUser(String username);
 }

@@ -77,4 +77,8 @@ public class TaskService {
 
         return task;
     }
+
+    public List<Task> retrieveTaskByUser(String username) {
+        return repository.findByUser(username);
+    }
 }
