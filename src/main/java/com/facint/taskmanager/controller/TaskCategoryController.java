@@ -13,6 +13,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.IanaLinkRelations;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -67,17 +69,19 @@ public class TaskCategoryController {
     @GetMapping("/{id}")
     public EntityModel<TaskCategoryResponse> retrieveCategoryById(@PathVariable Integer id) {
 
-        TaskCategory category = service.retrieveCategoryById(id);
-
-        // return mapper.map(service.retrieveCategoryById(id), TaskCategoryResponse.class);
-        return assembler.toModel(category);
+        return assembler.toModel(service.retrieveCategoryById(id));
     }
 
     @PostMapping
-    public TaskCategoryResponse saveCategory(@RequestBody TaskCategoryRequest categoryRequest) {
+    public ResponseEntity<EntityModel<TaskCategoryResponse>> saveCategory(@RequestBody TaskCategoryRequest categoryRequest) {
 
         TaskCategory category = mapper.map(categoryRequest, TaskCategory.class);
-        return mapper.map(service.saveCategory(category), TaskCategoryResponse.class);
+
+        EntityModel<TaskCategoryResponse> entityModel = assembler.toModel(service.saveCategory(category));
+        
+        return ResponseEntity
+            .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
+            .body(entityModel);
     }
 
     @DeleteMapping("/{id}")

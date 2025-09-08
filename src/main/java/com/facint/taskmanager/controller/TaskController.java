@@ -84,12 +84,11 @@ public class TaskController {
         Task task = mapper.map(taskRequest, Task.class);
         Task savedTask = service.saveTask(task);
         
-        EntityModel<TaskResponse> taskModel = assembler.toModel(savedTask);
+        EntityModel<TaskResponse> entityModel = assembler.toModel(savedTask);
 
-        // return mapper.map(savedTask, TaskResponse.class);
         return ResponseEntity
-            .created(taskModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
-            .body(taskModel);
+            .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
+            .body(entityModel);
     }
 
     @DeleteMapping("/{id}")
