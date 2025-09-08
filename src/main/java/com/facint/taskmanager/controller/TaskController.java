@@ -62,7 +62,6 @@ public class TaskController {
         List<EntityModel<TaskResponse>> tasksModel = tasks
             .stream()
             .map(assembler::toModel)
-            // .map(t -> mapper.map(t, TaskResponse.class))
             .collect(Collectors.toList());
         
         return CollectionModel.of(tasksModel, 
@@ -73,12 +72,11 @@ public class TaskController {
     public EntityModel<TaskResponse> retrieveTaskById(@PathVariable Integer id) {
 
         Task task = service.retrieveTaskById(id);
-
         return assembler.toModel(task);
     }
 
     @PostMapping
-    public TaskResponse addTask(@Valid @RequestBody TaskRequest taskRequest) {
+    public TaskResponse saveTask(@Valid @RequestBody TaskRequest taskRequest) {
 
         Task task = mapper.map(taskRequest, Task.class);
 

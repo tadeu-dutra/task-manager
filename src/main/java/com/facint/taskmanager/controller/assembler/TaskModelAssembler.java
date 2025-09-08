@@ -36,5 +36,4 @@ public class TaskModelAssembler implements RepresentationModelAssembler<Task, En
         
         return taskModel;
     }
-    
 }
