@@ -1,21 +1,43 @@
 package com.facint.taskmanager.controller;
 
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+import org.springframework.hateoas.MediaTypes;
+import org.springframework.hateoas.mediatype.problem.Problem;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.facint.taskmanager.controller.response.ErrorResponse;
+import com.facint.taskmanager.exception.TaskStatusException;
 
-@ControllerAdvice
+import jakarta.persistence.EntityNotFoundException;
+
+@RestControllerAdvice
 public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler {
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse entityNotFoundHandler(EntityNotFoundException e) {
+        return new ErrorResponse("Resource Not Found");
+    }
+
+    @ExceptionHandler(TaskStatusException.class)
+    ResponseEntity<?> updateTaskStatusHandler(TaskStatusException e) {
+        return ResponseEntity
+            .status(HttpStatus.METHOD_NOT_ALLOWED)
+            .header(HttpHeaders.CONTENT_TYPE, MediaTypes.HTTP_PROBLEM_DETAILS_JSON_VALUE)
+            .body(Problem.create().withTitle("Method Not Allowed")
+                .withDetail("You cannot perform this operation: " + e.getMessage()));
+    }
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,

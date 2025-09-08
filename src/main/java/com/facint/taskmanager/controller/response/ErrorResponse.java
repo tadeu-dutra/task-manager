@@ -7,6 +7,10 @@ import lombok.Data;
 @AllArgsConstructor
 public class ErrorResponse {
     
+    public ErrorResponse(String message) {
+        this.message = message;
+    }
+
     private String field;
     private String message;
 }
