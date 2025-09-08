@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.facint.taskmanager.controller.assembler.TaskModelAssembler;
 import com.facint.taskmanager.controller.request.TaskRequest;
 import com.facint.taskmanager.controller.response.TaskResponse;
 import com.facint.taskmanager.model.Task;
@@ -39,8 +41,11 @@ public class TaskController {
     @Autowired
     private ModelMapper mapper;
 
+    @Autowired
+    private TaskModelAssembler assembler;
+
     @GetMapping
-    public List<TaskResponse> retrieveAllTasks(@RequestParam Map<String, String> params) {
+    public CollectionModel<EntityModel<TaskResponse>> retrieveAllTasks(@RequestParam Map<String, String> params) {
 
         List<Task> tasks = new ArrayList<>();
 
@@ -54,24 +59,22 @@ public class TaskController {
             }
         }
 
-        List<TaskResponse> tasksResponse = tasks.stream().map(t -> mapper.map(t, TaskResponse.class)).collect(Collectors.toList());
+        List<EntityModel<TaskResponse>> tasksModel = tasks
+            .stream()
+            .map(assembler::toModel)
+            // .map(t -> mapper.map(t, TaskResponse.class))
+            .collect(Collectors.toList());
         
-        return tasksResponse;
+        return CollectionModel.of(tasksModel, 
+            linkTo(methodOn(TaskController.class).retrieveAllTasks(new HashMap<>())).withSelfRel());
     }
 
     @GetMapping("/{id}")
     public EntityModel<TaskResponse> retrieveTaskById(@PathVariable Integer id) {
 
         Task task = service.retrieveTaskById(id);
-        TaskResponse taskResponse = mapper.map(task, TaskResponse.class);
 
-        EntityModel<TaskResponse> taskModel = EntityModel.of(taskResponse, 
-            linkTo(methodOn(TaskController.class).retrieveTaskById(id)).withSelfRel(),
-            linkTo(methodOn(TaskController.class).retrieveAllTasks(new HashMap<>())).withRel("tasks"),
-            linkTo(methodOn(TaskCategoryController.class).retrieveCategoryById(taskResponse.getCategoryId())).withRel("category"),
-            linkTo(methodOn(UserController.class).retrieveUserById(taskResponse.getUserId())).withRel("user"));
-        
-        return taskModel;
+        return assembler.toModel(task);
     }
 
     @PostMapping
