@@ -18,3 +18,7 @@ Create Task with Due Date before current date (400) - "Data de Entrega deve ser 
 
 Create a Category without Name (400): "Nome da Categoria não pode ser vazio"
 Create a Category with Name with more than 50 chars (400): "Nome da Categoria não pode conter mais de 50 letras"
+
+Play with HATEOAS hyperlinks and links
+Play with Status Codes
+Play with workflow methods (TO_DO, IN_PROGRESS, DONE)
