@@ -8,5 +8,5 @@ import com.facint.taskmanager.model.TaskCategory;
 
 public interface TaskCategoryRepository extends JpaRepository<TaskCategory, Integer> {
 
-    public List<TaskCategory> findByNameLike(String description);
+    public List<TaskCategory> findByNameLike(String name);
 }
