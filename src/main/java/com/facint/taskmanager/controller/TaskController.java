@@ -14,6 +14,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.IanaLinkRelations;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -77,11 +79,16 @@ public class TaskController {
     }
 
     @PostMapping
-    public TaskResponse saveTask(@Valid @RequestBody TaskRequest taskRequest) {
+    public ResponseEntity<EntityModel<TaskResponse>> saveTask(@Valid @RequestBody TaskRequest taskRequest) {
 
         Task task = mapper.map(taskRequest, Task.class);
+        Task savedTask = service.saveTask(task);
+        
+        EntityModel<TaskResponse> entityModel = assembler.toModel(savedTask);
 
-        return mapper.map(service.saveTask(task), TaskResponse.class);
+        return ResponseEntity
+            .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
+            .body(entityModel);
     }
 
     @DeleteMapping("/{id}")
