@@ -16,6 +16,7 @@ import com.facint.taskmanager.controller.TaskController;
 import com.facint.taskmanager.controller.UserController;
 import com.facint.taskmanager.controller.response.TaskResponse;
 import com.facint.taskmanager.model.Task;
+import com.facint.taskmanager.model.TaskStatus;
 
 @Component
 public class TaskModelAssembler implements RepresentationModelAssembler<Task, EntityModel<TaskResponse>> {
@@ -33,6 +34,19 @@ public class TaskModelAssembler implements RepresentationModelAssembler<Task, En
             linkTo(methodOn(TaskController.class).retrieveAllTasks(new HashMap<>())).withRel("tasks"),
             linkTo(methodOn(TaskCategoryController.class).retrieveCategoryById(taskResponse.getCategoryId())).withRel("category"),
             linkTo(methodOn(UserController.class).retrieveUserById(taskResponse.getUserId())).withRel("user"));
+        
+        if (TaskStatus.IN_PROGRESS.equals(task.getStatus())) {
+            taskModel.add(
+                linkTo(methodOn(TaskController.class).closeTask(task.getId())).withRel("close"),
+                linkTo(methodOn(TaskController.class).cancelTask(task.getId())).withRel("cancel")
+            );
+        }
+        
+        if (TaskStatus.TO_DO.equals(task.getStatus())) {
+            taskModel.add(
+                linkTo(methodOn(TaskController.class).startTask(task.getId())).withRel("start")
+            );
+        }
         
         return taskModel;
     }
