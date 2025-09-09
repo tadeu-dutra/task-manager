@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -26,11 +27,11 @@ public class WebSecurityConfig {
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/public/**", "/css/**", "/js/**", "/images/**").permitAll()
                 // Allow both USER and ADMIN to perform GET requests on /tasks/** and /categories/**
-                .requestMatchers(HttpMethod.GET, "/tasks/**", "/categories/**").hasAnyRole("USER", "ADMIN")
+                .requestMatchers(HttpMethod.GET, "/api/tasks/**", "/api/categories/**").hasAnyRole("USER", "ADMIN")
                 // Allow ADMIN to perform POST, PUT, DELETE on /tasks/** and /categories/**
-                .requestMatchers(HttpMethod.POST, "/tasks/**", "/categories/**").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.PUT, "/tasks/**", "/categories/**").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.DELETE, "/tasks/**", "/categories/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/api/tasks/**", "/api/categories/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/api/tasks/**", "/api/categories/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/api/tasks/**", "/api/categories/**").hasRole("ADMIN")
                 // Allow only ADMIN on /users/**
                 .requestMatchers("/users/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
@@ -39,6 +40,7 @@ public class WebSecurityConfig {
                 .loginPage("/login")
                 .permitAll()
             )
+            .httpBasic(Customizer.withDefaults())
             .logout(logout -> logout.permitAll())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .csrf(csrf -> csrf.disable());
