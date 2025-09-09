@@ -9,10 +9,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
 @Table(name = "roles")
+@NoArgsConstructor
 public class Role {
     
     @Id
@@ -23,4 +25,7 @@ public class Role {
     @Column(length = 30)
     private RoleName name;
 
+    public Role(RoleName name) {
+        this.name = name;
+    }
 }
