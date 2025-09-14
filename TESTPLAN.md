@@ -355,6 +355,88 @@ This test plan covers the entire Task Manager Spring Boot application, including
   - Expected: All tests pass
   - Actual:
 
+### 10. Security Tests
+
+#### 10.1 Authentication Tests
+- **Test Case 10.1.1**: Successful login with valid credentials
+  - Prerequisites: User with ADMIN role exists
+  - Steps:
+    1. POST /auth/login with valid username and password
+    2. Verify 200 response with JWT token
+    3. Verify response contains token, id, username, roles
+  - Expected: JWT token returned
+  - Actual:
+
+- **Test Case 10.1.2**: Failed login with invalid credentials
+  - Steps:
+    1. POST /auth/login with invalid username or password
+    2. Verify 401 Unauthorized response
+  - Expected: Authentication error
+  - Actual:
+
+#### 10.2 Authorization Tests
+- **Test Case 10.2.1**: Access protected endpoint without authentication
+  - Steps:
+    1. GET /tasks without Authorization header
+    2. Verify 401 Unauthorized response
+  - Expected: Access denied
+  - Actual:
+
+- **Test Case 10.2.2**: Access ADMIN-only endpoint with USER role
+  - Prerequisites: JWT token for USER role
+  - Steps:
+    1. GET /users with USER role token
+    2. Verify 403 Forbidden response
+  - Expected: Access denied
+  - Actual:
+
+- **Test Case 10.2.3**: Access USER/ADMIN endpoint with USER role
+  - Prerequisites: JWT token for USER role
+  - Steps:
+    1. GET /tasks with USER role token
+    2. Verify 200 response
+  - Expected: Access granted
+  - Actual:
+
+- **Test Case 10.2.4**: Access ADMIN endpoint with ADMIN role
+  - Prerequisites: JWT token for ADMIN role
+  - Steps:
+    1. POST /tasks with ADMIN role token
+    2. Verify 201 response
+  - Expected: Access granted
+  - Actual:
+
+#### 10.3 CORS Tests
+- **Test Case 10.3.1**: CORS preflight request
+  - Steps:
+    1. Send OPTIONS request to /tasks with Origin: http://localhost:8081
+    2. Verify CORS headers in response (Access-Control-Allow-Origin, etc.)
+  - Expected: CORS headers present
+  - Actual:
+
+- **Test Case 10.3.2**: CORS request from allowed origin
+  - Steps:
+    1. Send GET /tasks with Origin: http://localhost:8081
+    2. Verify response allows the origin
+  - Expected: Request succeeds
+  - Actual:
+
+- **Test Case 10.3.3**: CORS request from disallowed origin
+  - Steps:
+    1. Send GET /tasks with Origin: http://localhost:8080
+    2. Verify CORS blocks the request
+  - Expected: Request blocked
+  - Actual:
+
+#### 10.4 Password Encryption Tests
+- **Test Case 10.4.1**: Verify password is encrypted
+  - Prerequisites: User created with password
+  - Steps:
+    1. Check database for user password
+    2. Verify password is hashed (not plain text)
+  - Expected: Password is BCrypt hashed
+  - Actual:
+
 ## Test Execution Instructions
 
 1. Start with environment setup
