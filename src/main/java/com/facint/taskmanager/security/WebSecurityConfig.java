@@ -3,6 +3,8 @@ package com.facint.taskmanager.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -15,36 +17,45 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class WebSecurityConfig {
 
+    private final AuthTokenFilter authTokenFilter;
+
+    public WebSecurityConfig(AuthTokenFilter authTokenFilter) {
+        this.authTokenFilter = authTokenFilter;
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/h2-console/**").permitAll() // allow H2 console
+            .csrf(csrf -> csrf.disable())
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .headers(headers -> headers.frameOptions().disable()) // H2 console
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/h2-console/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                 .requestMatchers("/users/**").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.GET, "/api/tasks/**", "/api/categories/**").hasAnyRole("USER", "ADMIN")
-                .requestMatchers(HttpMethod.POST, "/api/tasks/**", "/api/categories/**").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.PUT, "/api/tasks/**", "/api/categories/**").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.DELETE, "/api/tasks/**", "/api/categories/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/tasks/**", "/categories/**")
+                    .hasAnyRole("USER", "ADMIN")
+                .requestMatchers(HttpMethod.POST, "/tasks/**", "/categories/**")
+                    .hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/tasks/**", "/categories/**")
+                    .hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/tasks/**", "/categories/**")
+                    .hasRole("ADMIN")
                 .anyRequest().authenticated()
             )
-            // .httpBasic(Customizer.withDefaults())
-            // .logout(logout -> logout.permitAll())
-            // .csrf(csrf -> csrf.disable())
-            // .headers(headers -> headers.frameOptions().disable()) // Allow frames for H2 console
-            .addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class)
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+            .addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config)
+            throws Exception {
+        return config.getAuthenticationManager();
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-    @Bean
-    public AuthTokenFilter authTokenFilter() {
-        return new AuthTokenFilter();
-    }
-
 }

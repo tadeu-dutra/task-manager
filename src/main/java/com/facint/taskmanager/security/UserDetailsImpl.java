@@ -15,6 +15,8 @@ public class UserDetailsImpl implements UserDetails {
 
     private static final long serialVersionUID = 1L;
 
+    private Integer id;
+
     private String username;
 
     @JsonIgnore
@@ -27,7 +29,8 @@ public class UserDetailsImpl implements UserDetails {
         return authorities;
     }
 
-    public UserDetailsImpl(String username, String password, Collection<? extends GrantedAuthority> authorities) {
+    public UserDetailsImpl(Integer id, String username, String password, Collection<? extends GrantedAuthority> authorities) {
+        this.id = id;
         this.username = username;
         this.password = password;
         this.authorities = authorities;
@@ -39,8 +42,8 @@ public class UserDetailsImpl implements UserDetails {
             .stream()
             .map(role -> new SimpleGrantedAuthority(role.getName().name()))
             .collect(Collectors.toList());
-        
-        return new UserDetailsImpl(user.getUsername(), user.getPassword(), authorities);
+
+        return new UserDetailsImpl(user.getId(), user.getUsername(), user.getPassword(), authorities);
     }
 
     @Override public String getPassword() { return password; }
@@ -49,4 +52,8 @@ public class UserDetailsImpl implements UserDetails {
     @Override public boolean isAccountNonLocked() { return true; }
     @Override public boolean isCredentialsNonExpired() { return true; }
     @Override public boolean isEnabled() { return true; }
+
+    public Integer getId() {
+        return id;
+    }
 }
