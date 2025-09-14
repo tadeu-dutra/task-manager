@@ -60,6 +60,8 @@ public class JwtUtils {
             return true;
         } catch (ExpiredJwtException e) {
              logger.severe("JWT expired: " + e.getMessage());
+        } catch (io.jsonwebtoken.security.WeakKeyException we) {
+            logger.severe("WeakKeyException: " + we.getMessage());
         } catch (MalformedJwtException me) {
             logger.severe("Invalid JWT: " + me.getMessage());
         } catch (SignatureException se) {
