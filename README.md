@@ -24,6 +24,10 @@ This is a demo project for Spring Boot, showcasing the development of a task man
 - Model mapping with ModelMapper
 - HATEOAS support for hypermedia-driven APIs
 - Custom exception handling with detailed error responses
+- JWT-based authentication and authorization
+- Role-based access control with USER and ADMIN roles
+- Password encryption using BCryptPasswordEncoder
+- CORS configuration for frontend integration
 
 ## Prerequisites
 
@@ -58,6 +62,7 @@ The application will start on `http://localhost:8080`.
 - **Java** 17
 - **Spring Data JPA**
 - **Spring Web**
+- **Spring Security**
 - **H2 Database**
 - **PostgreSQL**
 - **Docker**
@@ -93,70 +98,78 @@ Enum with values:
 
 The application provides RESTful endpoints for managing tasks, users, and task categories. All endpoints return JSON responses.
 
+### Authentication Endpoints
+
+#### Login
+- **POST** `/auth/login`
+- Description: Authenticates a user and returns a JWT token.
+- Request Body: LoginRequest object (JSON) with username and password.
+- Response: JwtResponse object containing token, id, username, and roles.
+
 ### Task Endpoints
 
 #### Retrieve All Tasks
 - **GET** `/tasks`
-- Description: Retrieves all tasks.
+- Description: Retrieves all tasks. Requires USER or ADMIN role.
 - Response: List of TaskResponse objects.
 
 #### Retrieve Tasks by Description or Username
 - **GET** `/tasks?description={description}`
 - **GET** `/tasks?username={username}`
-- Description: Retrieves tasks filtered by description or by username.
+- Description: Retrieves tasks filtered by description or by username. Requires USER or ADMIN role.
 - Parameters: `description` or `username` (query parameter, string)
 - Response: List of TaskResponse objects.
 
 #### Retrieve Task by ID
 - **GET** `/tasks/{id}`
-- Description: Retrieves a specific task by its ID.
+- Description: Retrieves a specific task by its ID. Requires USER or ADMIN role.
 - Parameters: `id` (path parameter, integer)
 - Response: TaskResponse object.
 - Error: 404 if task not found.
 
 #### Create a New Task
 - **POST** `/tasks`
-- Description: Creates a new task.
+- Description: Creates a new task. Requires ADMIN role.
 - Request Body: TaskRequest object (JSON)
 - Response: TaskResponse object of the created task.
 - Validation: Description must be 5-150 characters, due date must be future or present.
 
 #### Delete a Task
 - **DELETE** `/tasks/{id}`
-- Description: Deletes a task by its ID.
+- Description: Deletes a task by its ID. Requires ADMIN role.
 - Parameters: `id` (path parameter, integer)
 - Response: 200 OK if successful.
 - Error: 404 if task not found.
 
 #### Task Workflow Endpoints
 - **PUT** `/tasks/{id}/start`
-- Description: Moves the task status to IN_PROGRESS.
+- Description: Moves the task status to IN_PROGRESS. Requires ADMIN role.
 - Response: Updated TaskResponse object.
 
 - **PUT** `/tasks/{id}/close`
-- Description: Moves the task status to DONE.
+- Description: Moves the task status to DONE. Requires ADMIN role.
 - Response: Updated TaskResponse object.
 
 - **PUT** `/tasks/{id}/cancel`
-- Description: Cancels the task.
+- Description: Cancels the task. Requires ADMIN role.
 - Response: Updated TaskResponse object.
 
 ### User Endpoints
 
 #### Retrieve All Users
 - **GET** `/users`
-- Description: Retrieves all users.
+- Description: Retrieves all users. Requires ADMIN role.
 - Response: List of UserResponse objects.
 
 #### Retrieve Users by Name
 - **GET** `/users?name={name}`
-- Description: Retrieves users filtered by name.
+- Description: Retrieves users filtered by name. Requires ADMIN role.
 - Parameters: `name` (query parameter, string)
 - Response: List of UserResponse objects.
 
 #### Retrieve User by ID
 - **GET** `/users/{id}`
-- Description: Retrieves a specific user by ID.
+- Description: Retrieves a specific user by ID. Requires ADMIN role.
 - Parameters: `id` (path parameter, integer)
 - Response: UserResponse object.
 
@@ -164,30 +177,30 @@ The application provides RESTful endpoints for managing tasks, users, and task c
 
 #### Retrieve All Categories
 - **GET** `/categories`
-- Description: Retrieves all task categories.
+- Description: Retrieves all task categories. Requires USER or ADMIN role.
 - Response: List of TaskCategoryResponse objects.
 
 #### Retrieve Categories by Name
 - **GET** `/categories?name={name}`
-- Description: Retrieves categories filtered by name.
+- Description: Retrieves categories filtered by name. Requires USER or ADMIN role.
 - Parameters: `name` (query parameter, string)
 - Response: List of TaskCategoryResponse objects.
 
 #### Retrieve Category by ID
 - **GET** `/categories/{id}`
-- Description: Retrieves a specific category by ID.
+- Description: Retrieves a specific category by ID. Requires USER or ADMIN role.
 - Parameters: `id` (path parameter, integer)
 - Response: TaskCategoryResponse object.
 
 #### Create a New Category
 - **POST** `/categories`
-- Description: Creates a new task category.
+- Description: Creates a new task category. Requires ADMIN role.
 - Request Body: TaskCategoryRequest object (JSON)
 - Response: TaskCategoryResponse object of the created category.
 
 #### Delete a Category
 - **DELETE** `/categories/{id}`
-- Description: Deletes a category by its ID.
+- Description: Deletes a category by its ID. Requires ADMIN role.
 - Parameters: `id` (path parameter, integer)
 - Response: 200 OK if successful.
 
@@ -236,6 +249,7 @@ The project includes comprehensive test cases covering:
 - Internationalization support (English and Portuguese messages)
 - Exception handling (e.g., 404 for not found, 400 for validation errors, 405 for invalid status transitions)
 - HATEOAS hyperlinks and workflow methods (start, close, cancel tasks)
+- Security features including JWT authentication, role-based access control, and CORS configuration
 
 ## Contributing
 
